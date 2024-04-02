@@ -149,7 +149,7 @@ check_simulation_ends () {
 test_valgrind () {
   local parameters="$3 $4 $5 $6 $7"
   local test_num="$8"
-  timeout 30 valgrind --leak-check=full --errors-for-leak-kinds=all --error-exitcode=1 "$2/$1" $parameters &> "./valgrind_$1.log"
+  timeout 30 valgrind --fair-sched=yes --leak-check=full --errors-for-leak-kinds=all --error-exitcode=1 "$2/$1" $parameters &> "./valgrind_$1.log"
   if [ $? -eq 0 ]; then
     echo "${green}[+] Test #${test_num} Valgrind Test Succeeded !${reset}"
   else
@@ -161,7 +161,7 @@ test_valgrind () {
 test_helgrind () {
   local parameters="$3 $4 $5 $6 $7"
   local test_num="$8"
-  timeout 30 valgrind --tool=helgrind --error-exitcode=1 "$2/$1" $parameters &> "./helgrind_$1.log"
+  timeout 30 valgrind --fair-sched=yes --tool=helgrind --error-exitcode=1 "$2/$1" $parameters &> "./helgrind_$1.log"
   if [ $? -eq 0 ]; then
     echo "${green}[+] Test #${test_num} Helgrind Test Succeeded !${reset}"
   else
@@ -173,7 +173,7 @@ test_helgrind () {
 test_valgrind_meals () {
   local parameters="$3 $4 $5 $6 $7"
   local test_num="$8"
-  timeout 30 valgrind --leak-check=full --errors-for-leak-kinds=all --error-exitcode=1 "$2/$1" $parameters &> "./valgrind_$1.log"
+  timeout 30 valgrind --fair-sched=yes --leak-check=full --errors-for-leak-kinds=all --error-exitcode=1 "$2/$1" $parameters &> "./valgrind_$1.log"
   if [ $? -eq 0 ]; then
     echo "${green}[+] Test #${test_num} Valgrind Test Succeeded !${reset}"
   else
@@ -185,7 +185,7 @@ test_valgrind_meals () {
 test_helgrind_meals () {
   local parameters="$3 $4 $5 $6 $7"
   local test_num="$8"
-  timeout 30 valgrind --tool=helgrind --error-exitcode=1 "$2/$1" $parameters &> "./helgrind_$1.log"
+  timeout 30 valgrind --fair-sched=yes --tool=helgrind --error-exitcode=1 "$2/$1" $parameters &> "./helgrind_$1.log"
   if [ $? -eq 0 ]; then
     echo "${green}[+] Test #${test_num} Helgrind Test Succeeded !${reset}"
   else
@@ -342,7 +342,7 @@ check_secure_thread_creation () {
     local program_path="$2"
 	local test_number="$3"
 
-	result=$( (timeout 10 ulimit -v 175000; valgrind --leak-check=full --errors-for-leak-kinds=all  "$program_path/$program_name" 10 60 60 60) 2>&1 )
+	result=$( (timeout 10 ulimit -v 175000; valgrind --fair-sched=yes --leak-check=full --errors-for-leak-kinds=all  "$program_path/$program_name" 10 60 60 60) 2>&1 )
 
 	if echo "$result" | grep -q "ERROR SUMMARY: 0 errors"; then
 		echo -e "${green}[+] Test #${test_number} Threads are protected during initialization agaisn't insufficient memory, no errors found${reset} \n"
